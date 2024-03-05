@@ -1,12 +1,10 @@
 import userRouter from '../modules/user/user.routes.js'
-import productRouter from '../modules/product/product.routes.js' 
-import categoryRouter from '../modules/category/category.routes.js' 
+import postRouter from '../modules/post/post.routes.js' 
 
 
 const useRoutes = (app) => {
     app.use('/api/user', userRouter);
-    app.use('/api/product', productRouter);
-    app.use('/api/category', categoryRouter);
+    app.use('/api/post', postRouter);
 };
 
 export default useRoutes;

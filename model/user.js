@@ -11,29 +11,32 @@ const schema = new Schema({
       type: String,
       required: true
   },
+  name:{
+      type: String,
+      required: true
+  },
   role: {
       type: String,
       required: true,
-      enum: ['user', 'admin'],
+      enum: ['user', 'admin', 'owner'],
       default: 'user'
   },
   email:{
       type: String,
       required: true,
   },
-  customer: [{
-      name: {
-          type: String,
-          required: true
-      },
-      phoneNumber: {
-          type: String,
-          required: true
-      },
-      info: {
-          type: String
-      }
-  }]
+  address:{
+    type: String,
+    required: true,
+  },
+  phone:{
+    type: String,
+    required: true,
+  },
+  popularity:{
+    type: Number,
+    required: false,
+  },
 }, { timestamps: true });
 
 const model = mongoose.model("User", schema);
@@ -46,6 +49,9 @@ const create = (data) => {
           username: data.username,
           password: data.encryptedPassword,
           email: data.email,
+          name: data.name,
+          address: data.address,
+          phone: data.phone,
         });
         newDocument
           .save()

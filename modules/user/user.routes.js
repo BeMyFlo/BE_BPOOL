@@ -3,25 +3,19 @@ import * as User from './user.controller.js';
 import checkLogin from '../../middlewares/checkLogin.js'
 const router = new Router();
 
-// @route GET api/profile
-// @desc Get Profile
-// @access Public
+//Get all users
 router.route('/').get(User.getUser);
-// @route GET api/profile
-// @desc Get Profile
-// @access Public
+//Register
 router.route('/register').post(User.createUser);
-// @route GET api/profile
-// @desc Get Profile
-// @access Public
-router.route('/update/:id').put(User.getUser);
-// @route GET api/profile
-// @desc Get Profile
-// @access Public
+//Update user
+router.route('/:id/update-user').put(User.updateUser);
+//Xóa user
 router.route('/').delete(User.deleteUser);
+//Đăng nhập
 router.route('/login').post(User.login);
-router.route('/:id/addCustomer').post(User.addCustomer);
-// router.route('/:id/addCustomer').post(checkLogin, User.addCustomer);
+//Đổi mật khẩu
+router.route('/:id/update-password').put(User.updatePassword);
+
 
 
 
