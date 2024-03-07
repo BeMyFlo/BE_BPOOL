@@ -1,4 +1,5 @@
 import Users, { userModel } from "../../model/user.js";
+import Profiles, { profileModel } from "../../model/profile.js";
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
 
@@ -16,30 +17,29 @@ export const getUser = async (req, res) => {
 export const createUser = async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  const email = req.body.email;
-  const name = req.body.name;
-  const address = req.body.address;
-  const phone = req.body.phone;
   try {
     const existingAccount = await Users.findOne({
       username: username,
     });
+
     if (existingAccount) {
       return res.status(400).json({ error: "Tài khoản đã tồn tại" });
     }
+
     const encryptedPassword = CryptoJS.AES.encrypt(
       password,
       process.env.KEY_CRYPTO
     ).toString();
+
     const newUser = await Users.create({
       username,
       encryptedPassword,
-      email,
-      name,
-      address,
-      phone,
     });
-    console.log(newUser);
+
+    await Profiles.create({
+      userId: newUser._id, 
+    });
+
     return res.status(201).json({ message: "Tài khoản đã được tạo" });
   } catch (error) {
     console.error(error);
@@ -86,14 +86,11 @@ export const login = async (req, res) => {
           process.env.JWT
         );
         res.cookie("token", token, { httpOnly: true });
-        // console.log("Cookie đã được thiết lập:", token);
         res.json({
           message: "Login successfully !!!",
           token: token,
         });
-        // res.status(200).json({success: true, message: 'Đăng nhập thành công'});
       } else {
-        // Không tìm thấy tài khoản, có thể xử lý thông báo hoặc trả về lỗi 404
         res.status(404).json({ error: "Tài khoản không tồn tại" });
       }
     }
@@ -107,7 +104,6 @@ export const updateUser = async (req, res) => {
     const userId = req.params.id;
     const { email, name, address } = req.body;
 
-    // Kiểm tra user có tồn tại không
     const user = await Users.findOne({
       _id: userId,
     });
@@ -135,7 +131,6 @@ export const updatePassword = async (req, res) => {
     const userId = req.params.id;
     const { newPassword } = req.body;
 
-    // Kiểm tra user có tồn tại không
     const user = await Users.findOne({
       _id: userId,
     });

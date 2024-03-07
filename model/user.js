@@ -11,31 +11,11 @@ const schema = new Schema({
       type: String,
       required: true
   },
-  name:{
-      type: String,
-      required: true
-  },
   role: {
       type: String,
       required: true,
       enum: ['user', 'admin', 'owner'],
       default: 'user'
-  },
-  email:{
-      type: String,
-      required: true,
-  },
-  address:{
-    type: String,
-    required: true,
-  },
-  phone:{
-    type: String,
-    required: true,
-  },
-  popularity:{
-    type: Number,
-    required: false,
   },
 }, { timestamps: true });
 
@@ -48,10 +28,6 @@ const create = (data) => {
         const newDocument = new model({
           username: data.username,
           password: data.encryptedPassword,
-          email: data.email,
-          name: data.name,
-          address: data.address,
-          phone: data.phone,
         });
         newDocument
           .save()
