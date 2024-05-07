@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 
 const schema = new Schema({
-    title: {
+    name: {
         type: String,
         required: true
     },
@@ -11,23 +11,19 @@ const schema = new Schema({
         type: String,
         required: true  
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
-    },
-    checkOwner: {
-      type: Boolean,
-      required: true,
-      default: false,
     },
     like: {
       type: Number,
       required: false
     },
+    amount_table: {
+      type: Number,
+      required: true
+    },
+    tables: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Table' }],
     imageUrl: {
         type: String,
         required: true
@@ -36,18 +32,18 @@ const schema = new Schema({
     { timestamps: true }
 );
 
-const model = mongoose.model("Post", schema);
-export const PostModel = model;
+const model = mongoose.model("Bar", schema);
+export const BarModel = model;
 
-const create = (data) => {
+//@Function
+  const create = (data) => {
     return new Promise((resolve, reject) => {
       try {
         const newDocument = new model({
-          title: data.title,
+          name: data.name,
           content: data.content,
-          userId: data.userId,
-          checkOwner: data.checkOwner,
           imageUrl: data.imageUrl,
+          amount_table: data.amount_table,
         });
         newDocument
           .save()
@@ -117,5 +113,24 @@ const create = (data) => {
       }
     });
   };
-  const Posts = {create, findOne, find, deleteOne};
-  export default Posts;
+
+  const addTableIdForBar = async (barId, tablesList) => {
+    try {
+        const tablesInfo = await Promise.all(tablesList);
+        const bar = await BarModel.findOne({ _id: barId });
+        bar.tables = tablesInfo;
+        await bar.save();
+        return tablesInfo;
+    } catch (error) {
+        throw error;
+    }
+};
+
+  const Bars = {
+    create, 
+    findOne, 
+    find, 
+    deleteOne, 
+    addTableIdForBar
+  };
+  export default Bars;

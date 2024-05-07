@@ -1,64 +1,37 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const BOOKING_STATUS_PENDING = 1;
-const BOOKING_STATUS_CONFIRMED = 2;
-const BOOKING_STATUS_CANCELLED = 3;
+const STATUS_AVAILABLE = 1;
 
 const schema = new Schema({
     bar_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Bar'
     },
-    table_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Table'
-    },
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    check_in_time: {
-        type: Date,
-        required: true
-    },
-    time: {
+    table_number: {
         type: Number,
         required: true
-    },
-    price: {
-        type: Number,
-        required: true
-    },
-    discount_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Discount',
-        default: null,
     },
     status: {
         type: Number,
         required: true,
-        default: BOOKING_STATUS_PENDING,
+        default: "available"
     }
 },
     { timestamps: true }
 );
 
-const model = mongoose.model("Booking", schema);
-export const bookingModel = model;
+const model = mongoose.model("Table", schema);
+export const tableModel = model;
 
 //@Function
 const create = (data) => {
     return new Promise((resolve, reject) => {
       try {
         const newDocument = new model({
-            bar_id: data.bar_id,
-            table_id: data.table_id,
-            user_id: data.user_id,
-            check_in_time: data.check_in_time,
-            time: data.time,
-            price: data.price,
-            discount_id: data.discount_id,
+          bar_id: data.bar_id,
+          table_number: data.table_number,
+          status: data.status,
         });
         newDocument
           .save()
@@ -129,10 +102,29 @@ const create = (data) => {
     });
   };
 
-  const Booking = {
-    create,
-    findOne,
-    find,
-    deleteOne
+  const updateStatus = (id, newStatus) => {
+    return new Promise((resolve, reject) => {
+      try {
+        model
+          .findOneAndUpdate({ _id: id }, { status: newStatus }, { new: true })
+          .then((document) => {
+            resolve(document);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  
+  const Tables = {
+    create, 
+    findOne, 
+    find, 
+    deleteOne, 
+    updateStatus, 
+    STATUS_AVAILABLE
   };
-  export default Booking;
+  export default Tables;

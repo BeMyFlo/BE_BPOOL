@@ -30,14 +30,12 @@ const schema = new Schema({
         type: String,
         required: false
     },
-    popularity: {
-        type: Number,
-        required: false
-    }
 }, { timestamps: true });
 
 const model = mongoose.model("Profile", schema);
 export const profileModel = model;
+
+//@Function
 const create = (data) => {
     return new Promise((resolve, reject) => {
       try {
@@ -88,5 +86,10 @@ const findOne = (filter) => {
         }
     })
   }
-const Profiles = {update, create, findOne};
+  
+const Profiles = {
+  update, 
+  create, 
+  findOne
+};
 export default Profiles;

@@ -1,51 +1,29 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const BOOKING_STATUS_PENDING = 1;
-const BOOKING_STATUS_CONFIRMED = 2;
-const BOOKING_STATUS_CANCELLED = 3;
-
 const schema = new Schema({
     bar_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Bar'
     },
-    table_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Table'
-    },
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    check_in_time: {
-        type: Date,
-        required: true
-    },
-    time: {
-        type: Number,
-        required: true
-    },
     price: {
         type: Number,
         required: true
     },
-    discount_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Discount',
-        default: null,
+    start_time: {
+        type: Date,
+        required: true
     },
-    status: {
-        type: Number,
-        required: true,
-        default: BOOKING_STATUS_PENDING,
-    }
+    end_time: {
+        type: Date,
+        required: true
+    },
 },
     { timestamps: true }
 );
 
-const model = mongoose.model("Booking", schema);
-export const bookingModel = model;
+const model = mongoose.model("Discount", schema);
+export const discountModel = model;
 
 //@Function
 const create = (data) => {
@@ -53,12 +31,9 @@ const create = (data) => {
       try {
         const newDocument = new model({
             bar_id: data.bar_id,
-            table_id: data.table_id,
-            user_id: data.user_id,
-            check_in_time: data.check_in_time,
-            time: data.time,
             price: data.price,
-            discount_id: data.discount_id,
+            start_time: data.start_time,
+            end_time: data.end_time,
         });
         newDocument
           .save()
@@ -129,10 +104,10 @@ const create = (data) => {
     });
   };
 
-  const Booking = {
+  const Discount = {
     create,
     findOne,
     find,
     deleteOne
   };
-  export default Booking;
+  export default Discount;

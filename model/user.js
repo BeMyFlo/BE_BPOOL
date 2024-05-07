@@ -22,6 +22,7 @@ const schema = new Schema({
 const model = mongoose.model("User", schema);
 export const userModel = model;
 
+//@Function
 const create = (data) => {
     return new Promise((resolve, reject) => {
       try {
@@ -97,5 +98,11 @@ const create = (data) => {
       }
     });
   };
-  const Users = {create, findOne, find, deleteOne};
+  
+  const Users = {
+    create, 
+    findOne, 
+    find, 
+    deleteOne
+  };
   export default Users;
