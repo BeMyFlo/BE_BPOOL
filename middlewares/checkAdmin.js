@@ -14,7 +14,7 @@ const checkAdmin = (req, res, next) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
     const result = jwt.verify(token, process.env.JWT);
-    if(result.role !== 'admin'  ){
+    if(result.role !== 'admin'){
         return res.status(403).json({ error: "Forbidden" });
     }
     next();

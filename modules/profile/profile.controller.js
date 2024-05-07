@@ -21,4 +21,4 @@ export const updateInfo = async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: "Đã xảy ra lỗi" });
     }
-  };
+};

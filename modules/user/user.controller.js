@@ -3,13 +3,11 @@ import Profiles, { profileModel } from "../../model/profile.js";
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
 
-export const getUser = async (req, res) => {
+export const getListUsers = async (req, res) => {
   try {
     const userList = await Users.find({});
-    // console.log(userList);
     res.status(200).json({ success: true, data: userList });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ error: "Đã xảy ra lỗi" });
   }
 };

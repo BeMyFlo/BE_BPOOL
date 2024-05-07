@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 import useRoutes from "./routers/index.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-dotenv.config(); // Loads environment variables from .env file
+dotenv.config(); 
 
 useDatabase();
 
@@ -14,14 +14,13 @@ app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// Middleware để đảm bảo kết nối MySQL đã được thiết lập trước khi xử lý yêu cầu
 
 useRoutes(app);
 
 app.listen(process.env.PORT || 8000, (error) => {
   if (!error) {
     console.log(
-      `> Pet Protection is running on Port:${process.env.PORT}! Build something amazing!`
+      `> Bpool is running on Port:${process.env.PORT}!`
     );
   }
 });
