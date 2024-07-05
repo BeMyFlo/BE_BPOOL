@@ -4,6 +4,10 @@ const { Schema } = mongoose;
 const BOOKING_STATUS_PENDING = 1;
 const BOOKING_STATUS_CONFIRMED = 2;
 const BOOKING_STATUS_CANCELLED = 3;
+const BOOKING_STATUS_COMPLETED = 4;
+const BOOKING_STATUS_REJECT = 5;
+const BOOKING_STATUS_REVERT = 6;
+const BOOKING_WAITING_APPROVE_CANCEL = 7;
 
 const schema = new Schema({
     bar_id: {
@@ -129,10 +133,27 @@ const create = (data) => {
     });
   };
 
+  const updateStatusBooking = async (idBooking, status) => {
+      const booking = await Booking.findOne({_id: idBooking});
+      if (!booking) {
+          return false;
+      }
+      booking.status = status;
+      return booking.save();
+  };
+  
   const Booking = {
+    BOOKING_STATUS_PENDING,
+    BOOKING_STATUS_CONFIRMED,
+    BOOKING_STATUS_CANCELLED,
+    BOOKING_STATUS_COMPLETED,
+    BOOKING_STATUS_REJECT,
+    BOOKING_STATUS_REVERT,
+    BOOKING_WAITING_APPROVE_CANCEL,
     create,
     findOne,
     find,
-    deleteOne
+    deleteOne,
+    updateStatusBooking,
   };
   export default Booking;

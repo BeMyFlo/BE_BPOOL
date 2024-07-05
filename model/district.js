@@ -1,42 +1,30 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const STATUS_AVAILABLE = 1;
-
 const schema = new Schema({
-    bar_id: {
+    name: {
+        type: String,
+        required: true
+    },
+    city_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Bar'
-    },
-    table_number: {
-        type: Number,
+        ref: 'City',
         required: true
     },
-    status: {
-        type: Number,
-        required: true,
-        default: "available"
-    },
-    type: {
-        type: Number,
-        required: true
-    }
 },
     { timestamps: true }
 );
 
-const model = mongoose.model("Table", schema);
-export const tableModel = model;
+const model = mongoose.model("District", schema);
+export const districtModel = model;
 
 //@Function
 const create = (data) => {
     return new Promise((resolve, reject) => {
       try {
         const newDocument = new model({
-          bar_id: data.bar_id,
-          table_number: data.table_number,
-          status: data.status,
-          type: data.type
+            name: data.name,
+            city_id: data.city_id
         });
         newDocument
           .save()
@@ -124,12 +112,11 @@ const create = (data) => {
     });
   }
   
-  const Tables = {
+  const District = {
     create, 
     findOne, 
     find, 
     deleteOne, 
     updateStatus, 
-    STATUS_AVAILABLE
   };
-  export default Tables;
+  export default District;

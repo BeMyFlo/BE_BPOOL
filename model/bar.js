@@ -1,10 +1,26 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
+const TYPE_HOLE = 1;
+const TYPE_CAROM = 2;
 
 const schema = new Schema({
     name: {
         type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    district_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'District',
+        required: true
+    },
+    city_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'City',
         required: true
     },
     content: {
@@ -21,12 +37,32 @@ const schema = new Schema({
     },
     amount_table: {
       type: Number,
+      required: false
+    },
+    amount_table_type_hole: {
+      type: Number,
+      required: true
+    },
+    amount_table_type_carom: {
+      type: Number,
       required: true
     },
     tables: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Table' }],
     imageUrl: {
         type: String,
         required: true
+    },
+    type: {
+        type: Number,
+        required: false
+    },
+    rating: {
+        type: Number,
+        required: false
+    },
+    price: {
+        type: Number,
+        required: false
     },
 },
     { timestamps: true }
@@ -43,7 +79,14 @@ export const BarModel = model;
           name: data.name,
           content: data.content,
           imageUrl: data.imageUrl,
-          amount_table: data.amount_table,
+          amount_table_type_hole: data.amount_table_type_hole,
+          amount_table_type_carom: data.amount_table_type_carom,
+          address: data.address,
+          district_id: data.district_id,
+          city_id: data.city_id,
+          owner: data.owner,
+          like: 0,
+          price: data.price,
         });
         newDocument
           .save()
@@ -124,13 +167,41 @@ export const BarModel = model;
     } catch (error) {
         throw error;
     }
-};
+  };
+
+  const updateTotalTable = async (barId, totalTable) => {
+    try {
+        const bar = await BarModel.findOne({ _id: barId });
+        bar.amount_table = totalTable;
+        await bar.save();
+    } catch (error) {
+        throw error;
+    }
+  }
+
+  const updateType = async (barId, amountTableTypeHole, amountTableTypeCarom) => {
+    try {
+        const bar = await BarModel.findOne({ _id: barId });
+        if (amountTableTypeHole >= amountTableTypeCarom) {
+            bar.type = Bars.TYPE_HOLE;
+        } else {
+            bar.type = Bars.TYPE_CAROM;
+        }
+        await bar.save();
+    } catch (error) {
+        throw error;
+    }
+  }
 
   const Bars = {
+    TYPE_HOLE,
+    TYPE_CAROM,
     create, 
     findOne, 
     find, 
     deleteOne, 
-    addTableIdForBar
+    addTableIdForBar,
+    updateTotalTable,
+    updateType,
   };
   export default Bars;

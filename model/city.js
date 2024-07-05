@@ -1,42 +1,36 @@
 import mongoose from "mongoose";
+import District from "./district.js";
 const { Schema } = mongoose;
 
-const STATUS_AVAILABLE = 1;
-
 const schema = new Schema({
-    bar_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Bar'
-    },
-    table_number: {
-        type: Number,
+    name: {
+        type: String,
         required: true
     },
-    status: {
-        type: Number,
-        required: true,
-        default: "available"
-    },
-    type: {
-        type: Number,
-        required: true
-    }
+    district: [{
+        name: {
+            type: String,
+            required: true
+        },
+        districtId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'District',
+            required: true
+        }
+    }]
 },
     { timestamps: true }
 );
 
-const model = mongoose.model("Table", schema);
-export const tableModel = model;
+const model = mongoose.model("City", schema);
+export const cityModel = model;
 
 //@Function
 const create = (data) => {
     return new Promise((resolve, reject) => {
       try {
         const newDocument = new model({
-          bar_id: data.bar_id,
-          table_number: data.table_number,
-          status: data.status,
-          type: data.type
+            name: data.name,
         });
         newDocument
           .save()
@@ -123,13 +117,31 @@ const create = (data) => {
       }
     });
   }
+
+  const updateDistrict = async (cityId, districtId) => {
+    const district = await District.findOne({_id: districtId});
+    return new Promise((resolve, reject) => {
+      try {
+        model
+          .findOneAndUpdate({ _id: cityId }, { $push: {district: {name: district.name, districtId: districtId}} }, { new: true })
+            .then((document) => {
+                resolve(document);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+        }catch(error){
+            reject(error);
+        }
+    });
+ }
   
-  const Tables = {
+  const City = {
     create, 
     findOne, 
     find, 
     deleteOne, 
     updateStatus, 
-    STATUS_AVAILABLE
+    updateDistrict
   };
-  export default Tables;
+  export default City;

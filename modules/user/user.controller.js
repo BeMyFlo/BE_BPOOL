@@ -3,6 +3,12 @@ import Profiles, { profileModel } from "../../model/profile.js";
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
 
+/**
+ * Lấy ra danh sách user
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 export const getListUsers = async (req, res) => {
   try {
     const userList = await Users.find({});
@@ -12,6 +18,13 @@ export const getListUsers = async (req, res) => {
   }
 };
 
+
+/**
+ * Tạo user mới (Register)
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 export const createUser = async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -45,6 +58,12 @@ export const createUser = async (req, res) => {
   }
 };
 
+/**
+ * Xóa user
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.body;
@@ -64,6 +83,11 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+/**
+ * Login user
+ * @param {*} req 
+ * @param {*} res 
+ */
 export const login = async (req, res) => {
   const username = req.body.username;
   const inputPassword = req.body.password;
@@ -97,6 +121,13 @@ export const login = async (req, res) => {
     res.status(500).json({ error: "Đã xảy ra lỗi" });
   }
 };
+
+/**
+ * Cập nhật thông tin user
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 export const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -124,6 +155,13 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+/**
+ * Đổi password
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 export const updatePassword = async (req, res) => {
   try {
     const userId = req.params.id;
