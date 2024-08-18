@@ -3,7 +3,6 @@ import Profiles, { profileModel } from "../../model/profile.js";
 export const updateInfo = async (req, res) => {
     try {
       const userId = req.user._id;
-      console.log(userId);
       const user = await Profiles.findOne({ userId: userId  });
 
       if (!user) {

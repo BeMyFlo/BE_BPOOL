@@ -30,6 +30,34 @@ export const getListBars = async (req, res) => {
 }
 
 /**
+ * Lấy ra danh sách các quán bida theo type
+ * @param {*} req 
+ * @param {*} res 
+ */
+export const getListBarsByType = async (req, res) => {
+    try {
+        let filter = {};
+        const city = req.query.city;
+        if (city) {
+            filter.city_id = city;
+        }
+        const district = req.query.district;
+        if (district) {
+            filter.district_id = district;
+        }
+        const type = req.query.type;
+        if (type) {
+            filter.type = type;
+        }
+        let bars = await Bars.find(filter);
+        res.status(200).json({ success: true, data: bars });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Đã xảy ra lỗi khi xem các bài viết' });
+    }
+}
+
+
+/**
  * Tạo quán bida mới
  * @param {*} req 
  * @param {*} res 

@@ -6,6 +6,6 @@ const router = new Router();
 
 
 router.route("/create").post(City.create);
-router.route("/list").get(City.getListCity);
+router.route("/").get(City.getListCity);
 router.route("/:id").get(City.getCityById);
 export default router;

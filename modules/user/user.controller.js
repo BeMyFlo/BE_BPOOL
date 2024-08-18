@@ -91,7 +91,6 @@ export const deleteUser = async (req, res) => {
 export const login = async (req, res) => {
   const username = req.body.username;
   const inputPassword = req.body.password;
-
   try {
     const user = await Users.findOne({
       username,

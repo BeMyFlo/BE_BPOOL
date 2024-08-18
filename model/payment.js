@@ -1,79 +1,47 @@
 import mongoose from "mongoose";
-import Payment from "./payment.js";
 const { Schema } = mongoose;
 
-const BOOKING_STATUS_PENDING = 1;
-const BOOKING_STATUS_CONFIRMED = 2;
-const BOOKING_STATUS_CANCELLED = 3;
-const BOOKING_STATUS_COMPLETED = 4;
-const BOOKING_STATUS_REJECT = 5;
-const BOOKING_STATUS_REVERT = 6;
-const BOOKING_WAITING_APPROVE_CANCEL = 7;
+const PAYMENT_WAITING = 0;
+const PAYMENT_SUCCESS = 1;
+
+//method
+const PAYMENT_METHOD_CASH = 1;
+const PAYMENT_METHOD_BANK = 2;
 
 const schema = new Schema({
-    bar_id: {
+    booking_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Bar'
-    },
-    table_id: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Table'
-    }],
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    check_in_time: {
-        type: Date,
-        required: true
-    },
-    time: {
-        type: Number,
-        required: true
+        ref: 'Booking'
     },
     price: {
         type: Number,
         required: true
     },
-    discount_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Discount',
-        default: null,
-    },
-    status: {
+    status_payment: {
         type: Number,
         required: true,
-        default: BOOKING_STATUS_PENDING,
-    },
-    payment_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Payment',
-        default: null,
+        default: PAYMENT_WAITING,
     },
     payment_method: {
         type: Number,
         required: true,
-        default: Payment.PAYMENT_METHOD_CASH
+        default: PAYMENT_METHOD_CASH
     }
 },
     { timestamps: true }
 );
 
-const model = mongoose.model("Booking", schema);
-export const bookingModel = model;
+const model = mongoose.model("Payment", schema);
+export const paymentModel = model;
 
 //@Function
 const create = (data) => {
     return new Promise((resolve, reject) => {
       try {
         const newDocument = new model({
-            bar_id: data.barId,
-            table_id: data.tableId,
-            user_id: data.user_id,
-            check_in_time: data.check_in_time,
-            time: data.time,
+            booking_id: data.booking_id,
             price: data.price,
-            discount_id: data.discount_id,
+            status_payment: data.status_payment,
             payment_method: data.payment_method
         });
         newDocument
@@ -145,37 +113,24 @@ const create = (data) => {
     });
   };
 
-  const updateStatusBooking = async (idBooking, status) => {
-      const booking = await Booking.findOne({_id: idBooking});
-      if (!booking) {
+  const updateStatusPayment = async (idPayment, status) => {
+      const payment = await Payment.findOne({_id: idPayment});
+      if (!payment) {
           return false;
       }
-      booking.status = status;
-      return booking.save();
+      payment.status_payment = status;
+      return payment.save();
   };
-
-  const updatePaymentId = async (idBooking, idPayment) => {
-      const booking = await Booking.findOne({_id: idBooking});
-      if (!booking) {
-          return false;
-      }
-      booking.payment_id = idPayment;
-      return booking.save();
-  }
   
-  const Booking = {
-    BOOKING_STATUS_PENDING,
-    BOOKING_STATUS_CONFIRMED,
-    BOOKING_STATUS_CANCELLED,
-    BOOKING_STATUS_COMPLETED,
-    BOOKING_STATUS_REJECT,
-    BOOKING_STATUS_REVERT,
-    BOOKING_WAITING_APPROVE_CANCEL,
+  const Payment = {
+    PAYMENT_WAITING,
+    PAYMENT_SUCCESS,
+    PAYMENT_METHOD_CASH,
+    PAYMENT_METHOD_BANK,
     create,
     findOne,
     find,
     deleteOne,
-    updateStatusBooking,
-    updatePaymentId
+    updateStatusPayment,
   };
-  export default Booking;
+  export default Payment;
