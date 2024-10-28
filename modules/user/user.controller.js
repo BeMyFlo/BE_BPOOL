@@ -110,6 +110,7 @@ export const login = async (req, res) => {
         res.json({
           message: "Login successfully !!!",
           token: token,
+          user: user,
         });
       } else {
         res.status(404).json({ error: "Tài khoản không tồn tại" });
