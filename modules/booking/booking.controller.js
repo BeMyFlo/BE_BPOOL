@@ -27,8 +27,6 @@ export const createBooking = async(req,res) => {
             price: priceDiscounted,
             payment_method: req.body.payment_method,
         }
-        console.log(data);
-
         const booking = await Booking.create(data);
 
         const payment = await Payment.create({ 
@@ -56,14 +54,19 @@ export const createBooking = async(req,res) => {
  * @param {*} req 
  * @param {*} res 
  */
-export const getListBookingByUserId = async(req,res) => {
-    try{
-        const bookings = await Booking.find({ userId: req.user._id });
+export const getListBookingByUserId = async (req, res) => {
+    try {
+        const bookings = await Booking.find(
+            { user_id: req.user._id },
+            [{ path: 'bar_id', select: 'imageUrl name' }]
+        );
+        console.log(bookings);
         res.status(200).json({ success: true, data: bookings });
-    }catch(error){
+    } catch (error) {
+        console.error(error);
         res.status(500).json({ success: false, message: 'Đã xảy ra lỗi khi xem danh sách booking' });
     }
-}
+  };
 
 /**
  * Cập nhật trạng thái booking

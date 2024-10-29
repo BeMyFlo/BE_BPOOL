@@ -69,7 +69,7 @@ const create = (data) => {
         const newDocument = new model({
             bar_id: data.barId,
             table_id: data.tableId,
-            user_id: data.user_id,
+            user_id: data.userId,
             date: data.date,
             hour: data.hour,
             price: data.price,
@@ -107,11 +107,16 @@ const create = (data) => {
     })
   }
 
-  const find = (filter) => {
+  const find = (filter, populateFields = []) => {
     return new Promise((resolve, reject) => {
       try {
-        model
-          .find({ ...filter})
+        let query = model.find({ ...filter });
+  
+        populateFields.forEach((field) => {
+          query = query.populate(field);
+        });
+  
+        query
           .then((documents) => {
             resolve(documents);
           })
