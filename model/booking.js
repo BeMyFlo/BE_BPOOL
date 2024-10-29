@@ -23,11 +23,11 @@ const schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    check_in_time: {
-        type: Date,
+    date: {
+        type: Number,
         required: true
     },
-    time: {
+    hour: {
         type: Number,
         required: true
     },
@@ -70,8 +70,8 @@ const create = (data) => {
             bar_id: data.barId,
             table_id: data.tableId,
             user_id: data.user_id,
-            check_in_time: data.check_in_time,
-            time: data.time,
+            date: data.date,
+            hour: data.hour,
             price: data.price,
             discount_id: data.discount_id,
             payment_method: data.payment_method

@@ -21,12 +21,13 @@ export const createBooking = async(req,res) => {
             barId: req.body.barId,
             tableId: req.body.tableId,
             userId: req.user._id,
-            check_in_time: req.body.check_in_time,
-            time: req.body.time,
+            date: req.body.date,
+            hour: req.body.hour,
             discount: req.body.discount,
             price: priceDiscounted,
             payment_method: req.body.payment_method,
         }
+        console.log(data);
 
         const booking = await Booking.create(data);
 
