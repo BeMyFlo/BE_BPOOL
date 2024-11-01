@@ -95,6 +95,16 @@ export const login = async (req, res) => {
     const user = await Users.findOne({
       username,
     });
+
+    const profile = await Profiles.findOne({
+      userId: user._id,
+    });
+
+    const userData = {
+      ...user.toObject(),
+      profile: profile ? profile.toObject() : null,
+    };
+
     if (user) {
       const HashPassword = CryptoJS.AES.decrypt(
         user.password,
@@ -110,7 +120,7 @@ export const login = async (req, res) => {
         res.json({
           message: "Login successfully !!!",
           token: token,
-          user: user,
+          user: userData,
         });
       } else {
         res.status(404).json({ error: "Tài khoản không tồn tại" });

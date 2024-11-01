@@ -13,6 +13,7 @@ export const updateInfo = async (req, res) => {
       if (req.body.name) user.name = req.body.name;
       if (req.body.address) user.address = req.body.address;
       if (req.body.phone) user.phone = req.body.phone;
+      if (req.body.imageUrl) user.imageUrl = req.body.imageUrl;
   
       const updatedProfile = await user.save();
   
